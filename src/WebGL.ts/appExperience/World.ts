@@ -1,18 +1,18 @@
 import * as THREE from 'three'
 // import { MouseCursorPosition } from "../utils/types";
 // import gsap from 'gsap'
-import RoomExperience from '.';
+import AppExperience from '.';
 import DebugUI from '../utils/DebugUI';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 
 export default class World {
-    experience: RoomExperience;
+    experience: AppExperience;
     loadedResource: any;
     debugUI: DebugUI;
     orbitControls!: OrbitControls;
 
-    constructor(experience: RoomExperience) {
+    constructor(experience: AppExperience) {
         // Initialize
         this.experience = experience
         this.loadedResource = experience.resourcesLoader?.items
@@ -29,15 +29,7 @@ export default class World {
     }
 
     setDefault() {
-        this.experience.resourcesLoader.on("3dRoomModelReady", () => {
-            const sunLight = new THREE.DirectionalLight("white", 3);
-            const material = new THREE.MeshBasicMaterial({ color: 'grey' });
-            // this.loadedResource['3dRoomModel'].scene.traverse((child: any) => {
-            //     child.material = material
-            // })
-            this.experience.scene.add(this.loadedResource['3dRoomModel'].scene, sunLight)
-            this.initiateOrbitControls();
-        })
+        this.initiateOrbitControls();
     }
 
 

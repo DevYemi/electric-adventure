@@ -10,8 +10,50 @@ $deep-white: rgba(235, 235, 235, 0.596);
   color: white;
   font-family: "Roboto", sans-serif;
 }
+
+// APP STYLES -----------------------------
 html,
-body {
+body,
+.app-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.app-wrapper {
+  position: relative;
+  // overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-blur-bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  filter: blur(25px);
+  background: rgb(89, 88, 67);
+  background: linear-gradient(
+    2deg,
+    rgba(89, 88, 67, 1) 4%,
+    rgba(152, 155, 116, 1) 18%,
+    rgba(214, 178, 37, 1) 35%,
+    rgba(177, 160, 91, 1) 61%,
+    rgba(70, 107, 110, 1) 100%
+  );
+}
+
+.app {
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 90vw;
+  height: 90vh;
+  max-width: 885px;
+  max-height: 527px;
   background: rgb(185, 129, 20);
   background: linear-gradient(
     9deg,
@@ -23,41 +65,23 @@ body {
   );
 }
 
-// APP STYLES -----------------------------
-html,
-body,
-.app-wrapper {
-  width: 100%;
-  height: 100%;
-}
-
-.app-wrapper {
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.app {
-  overflow: auto;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 95vw;
-}
-
 // HEADER STYLES ------------------------------------------
 .header {
   display: flex;
   justify-content: space-between;
   position: absolute;
   width: 100%;
+  padding: 1em;
+}
+.header-text {
+  height: fit-content;
+  font-size: 2rem;
+  text-align: center;
 
-  h2 {
-    height: fit-content;
-    font-size: 2rem;
-    text-align: center;
+  span {
+    display: block;
+    clip-path: polygon(0 0, 100% 0, 100% 0%, 0 0%);
+    transform: translateY(40px);
   }
 }
 .header-nav {
@@ -77,11 +101,15 @@ body,
 }
 
 // MAIN STYLES -----------------------------------------------------
+.main {
+  // overflow: auto;
+  padding: 1em;
+  margin-top: 23em;
+}
 .hero-sec {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 25em;
 }
 .hero-sec-detail {
   button {
@@ -125,7 +153,25 @@ body,
   }
 }
 
+.content-sec {
+  overflow: auto;
+  width: 70%;
+  margin-top: 5em;
+  margin-left: auto;
+  margin-right: auto;
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 6em;
+  }
+}
+
+// CANVAS STYLES ------------------------
+.webgl-canvas {
+}
+
 // BREAK-POINTS -----------------------------
+
 @media only screen and (min-width: 768px) {
   // APP STYLES -----------------------------
   .app {
@@ -140,11 +186,30 @@ body,
     }
   }
   // MAIN STYLES ----------------------------
+  .main {
+    margin-top: 25em;
+  }
   .hero-sec-blueprint {
     display: block;
   }
 
   .hero-sec-icons {
     column-gap: 30px;
+  }
+
+  .content-sec {
+    h2 {
+      text-align: center;
+      font-size: 3rem;
+    }
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .header {
+    padding: 4em 4em 0 4em;
+  }
+  .main {
+    padding: 0 4em;
   }
 }

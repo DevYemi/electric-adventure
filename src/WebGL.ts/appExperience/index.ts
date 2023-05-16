@@ -3,6 +3,7 @@ import DefaultExperience from '../utils/DefaultExperience';
 import { Camera3dSpace, DefaultExperienceOptions } from '../utils/types';
 import sources from './sources';
 import World from './World';
+import UiAnimations from './UiAnimations';
 
 const camera3dSpace: Camera3dSpace = {
     position: new THREE.Vector3(-2, 1.1, 1.7),
@@ -15,20 +16,23 @@ const defaultExperienceOptions: DefaultExperienceOptions = {
     useWindowSizeOnResize: true
 }
 
-export default class RoomExperience extends DefaultExperience {
-    private static _instance: RoomExperience | null;
+export default class AppExperience extends DefaultExperience {
+    private static _instance: AppExperience | null;
     world!: World;
+    uiAnimations!: UiAnimations
 
     constructor(canvas: HTMLCanvasElement) {
-        if (RoomExperience._instance instanceof RoomExperience) {
-            return RoomExperience._instance
+        if (AppExperience._instance instanceof AppExperience) {
+            return AppExperience._instance
         }
         super(canvas, camera3dSpace, defaultExperienceOptions, sources)
 
-        this.world = new World(this)
+        this.world = new World(this);
+        this.uiAnimations = new UiAnimations(this);
+
 
         // Create Singleton
-        RoomExperience._instance = this;
+        AppExperience._instance = this;
 
         //Time tick event
         this.time.on('tick', this.updateWithTick.bind(this))
@@ -41,7 +45,7 @@ export default class RoomExperience extends DefaultExperience {
     }
 
     destroyExperience() {
-        RoomExperience._instance = null;
+        AppExperience._instance = null;
         this.destroyDefaultExperience();
         this.world.destroy();
     }

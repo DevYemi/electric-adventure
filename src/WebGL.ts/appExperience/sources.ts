@@ -6,14 +6,14 @@ import { Sources } from '../utils/types'
 
 const sources: Sources[] = [
 
-    {
-        name: '3dRoomModel',
-        type: 'gltfModel',
-        path: '/assets/webGL/bruno-3d-room.glb',
-        useDraco: true,
-        groupName: '3dRoom',
-        totalGroupMember: 1,
-    },
+    // {
+    //     name: '3dRoomModel',
+    //     type: 'gltfModel',
+    //     path: '/assets/webGL/bruno-3d-room.glb',
+    //     useDraco: true,
+    //     groupName: '3dRoom',
+    //     totalGroupMember: 1,
+    // },
 ]
 
 
