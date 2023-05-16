@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+// import * as THREE from 'three'
 // import { MouseCursorPosition } from "../utils/types";
 // import gsap from 'gsap'
 import AppExperience from '.';
