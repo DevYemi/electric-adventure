@@ -1,5 +1,6 @@
 import "@/styles/style.scss"
-import AppExperience from "./WebGL.ts/appExperience"
+import "@/styles/lenis-scroll.css"
+import AppExperience from "./WebGL/appExperience"
 
 
 const canvasElement = document.querySelector('.webgl-canvas') as HTMLCanvasElement

@@ -21,7 +21,7 @@ body,
 
 .app-wrapper {
   position: relative;
-  // overflow: hidden;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,6 +45,7 @@ body,
 }
 
 .app {
+  overflow: hidden;
   border-radius: 20px;
   position: relative;
   display: flex;
@@ -53,7 +54,7 @@ body,
   width: 90vw;
   height: 90vh;
   max-width: 885px;
-  max-height: 527px;
+  max-height: 570px;
   background: rgb(185, 129, 20);
   background: linear-gradient(
     9deg,
@@ -63,6 +64,51 @@ body,
     rgba(188, 175, 65, 1) 61%,
     rgba(135, 167, 116, 1) 100%
   );
+}
+
+.drag-up-indicator {
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: $deep-white;
+  cursor: pointer;
+
+  span {
+    color: $deep-white;
+    font-size: smaller;
+    opacity: 0;
+  }
+
+  svg {
+    fill: $deep-white;
+    opacity: 0;
+  }
+}
+
+.drag-down-indicator {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: $deep-white;
+
+  span {
+    color: $deep-white;
+    font-size: smaller;
+    opacity: 0;
+  }
+
+  svg {
+    fill: $deep-white;
+    opacity: 0;
+  }
 }
 
 // HEADER STYLES ------------------------------------------
@@ -89,10 +135,14 @@ body,
   flex-direction: column;
   row-gap: 20px;
   font-size: small;
+  opacity: 0;
+  visibility: hidden;
 
   a {
     text-decoration: none;
     text-transform: uppercase;
+    transform: translateY(40px);
+    opacity: 0;
 
     &:hover {
       text-decoration: underline;
@@ -102,9 +152,10 @@ body,
 
 // MAIN STYLES -----------------------------------------------------
 .main {
-  // overflow: auto;
+  overflow: hidden;
   padding: 1em;
-  margin-top: 23em;
+  margin-top: 20em;
+  padding-top: 2em;
 }
 .hero-sec {
   display: flex;
@@ -112,7 +163,14 @@ body,
   align-items: flex-end;
 }
 .hero-sec-detail {
+  p {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+
   button {
+    transform: translateY(40px);
+    opacity: 0;
     margin-top: 1.2em;
     padding: 0.8em 2em;
     border-radius: 40px;
@@ -127,7 +185,7 @@ body,
   height: 100px;
   border: 1px solid $deep-white;
   border-radius: 1px;
-
+  clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
   img {
     width: 100%;
     height: 100%;
@@ -138,6 +196,8 @@ body,
   display: flex;
   column-gap: 10px;
   span {
+    transform: translateY(20px);
+    opacity: 0;
     border: 1px solid $deep-white;
     padding: 0.5em;
     border-radius: 50%;
@@ -156,7 +216,7 @@ body,
 .content-sec {
   overflow: auto;
   width: 70%;
-  margin-top: 5em;
+  margin-top: 6em;
   margin-left: auto;
   margin-right: auto;
   h2 {
@@ -168,9 +228,20 @@ body,
 
 // CANVAS STYLES ------------------------
 .webgl-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  // z-index: -1;
 }
 
 // BREAK-POINTS -----------------------------
+
+@media only screen and (min-width: 420px) {
+  .header-nav {
+    opacity: 1;
+    visibility: visible;
+  }
+}
 
 @media only screen and (min-width: 768px) {
   // APP STYLES -----------------------------
@@ -187,7 +258,7 @@ body,
   }
   // MAIN STYLES ----------------------------
   .main {
-    margin-top: 25em;
+    margin-top: 20em;
   }
   .hero-sec-blueprint {
     display: block;
@@ -210,6 +281,8 @@ body,
     padding: 4em 4em 0 4em;
   }
   .main {
-    padding: 0 4em;
+    padding-left: 4em;
+    padding-right: 4em;
+    margin-top: 23em;
   }
 }

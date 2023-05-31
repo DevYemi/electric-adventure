@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import DefaultExperience from '../utils/DefaultExperience';
 import { Camera3dSpace, DefaultExperienceOptions } from '../utils/types';
 import sources from './sources';
-import World from './World';
-import UiAnimations from './UiAnimations';
+import World from './world';
+import UiAnimations from './uiAnimations';
 
 const camera3dSpace: Camera3dSpace = {
     position: new THREE.Vector3(-2, 1.1, 1.7),
@@ -13,13 +13,13 @@ const camera3dSpace: Camera3dSpace = {
 }
 
 const defaultExperienceOptions: DefaultExperienceOptions = {
-    useWindowSizeOnResize: true
+    useWindowSizeOnResize: false
 }
 
 export default class AppExperience extends DefaultExperience {
     private static _instance: AppExperience | null;
     world!: World;
-    uiAnimations!: UiAnimations
+    uiAnimations!: UiAnimations;
 
     constructor(canvas: HTMLCanvasElement) {
         if (AppExperience._instance instanceof AppExperience) {

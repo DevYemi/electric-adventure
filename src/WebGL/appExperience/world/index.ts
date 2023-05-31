@@ -1,8 +1,7 @@
-// import * as THREE from 'three'
-// import { MouseCursorPosition } from "../utils/types";
-// import gsap from 'gsap'
-import AppExperience from '.';
-import DebugUI from '../utils/DebugUI';
+import * as THREE from 'three'
+import gsap from 'gsap'
+import AppExperience from '..';
+import DebugUI from '../../utils/DebugUI';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 
@@ -11,12 +10,14 @@ export default class World {
     loadedResource: any;
     debugUI: DebugUI;
     orbitControls!: OrbitControls;
+    scene: THREE.Scene
 
     constructor(experience: AppExperience) {
         // Initialize
         this.experience = experience
         this.loadedResource = experience.resourcesLoader?.items
         this.debugUI = experience.debugUI;
+        this.scene = experience.scene;
 
         this.setDefault();
 
@@ -30,6 +31,15 @@ export default class World {
 
     setDefault() {
         this.initiateOrbitControls();
+
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshBasicMaterial({ color: "red" });
+
+        const boxMesh = new THREE.Mesh(geometry, material);
+
+        this.scene.add(boxMesh);
+
+
     }
 
 
