@@ -2,7 +2,6 @@ import { Pane } from 'tweakpane';
 export default class DebugUI {
     ui: Pane | null = null;
     isActive: boolean = false;
-    debugFolder: object = {}
     constructor() {
         if (window.location.hash === "#debug") {
             this.isActive = true,

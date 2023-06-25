@@ -6,7 +6,7 @@ import World from './world';
 import UiAnimations from './uiAnimations';
 
 const camera3dSpace: Camera3dSpace = {
-    position: new THREE.Vector3(-2, 1.1, 1.7),
+    position: new THREE.Vector3(1.14, 0.09, 3.8),
     scale: new THREE.Vector3(1, 1, 1),
     rotation: new THREE.Vector3(0, 0, 0),
     fov: 75

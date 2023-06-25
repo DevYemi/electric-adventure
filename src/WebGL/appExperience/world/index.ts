@@ -1,8 +1,10 @@
 import * as THREE from 'three'
-import gsap from 'gsap'
 import AppExperience from '..';
 import DebugUI from '../../utils/DebugUI';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import CarModel from './CarModel';
+import Environment from './Environment';
+import Controls from './Controls';
 
 
 export default class World {
@@ -10,7 +12,10 @@ export default class World {
     loadedResource: any;
     debugUI: DebugUI;
     orbitControls!: OrbitControls;
-    scene: THREE.Scene
+    scene: THREE.Scene;
+    carModel: CarModel;
+    environment: Environment;
+    controls: Controls;
 
     constructor(experience: AppExperience) {
         // Initialize
@@ -19,19 +24,22 @@ export default class World {
         this.debugUI = experience.debugUI;
         this.scene = experience.scene;
 
-        this.setDefault();
+        this.environment = new Environment(experience);
+        this.controls = new Controls(experience);
+        this.carModel = new CarModel(experience, this.controls);
+
+        // this.setDefault();
+        this.initiateOrbitControls();
 
     }
 
     initiateOrbitControls() {
-        this.orbitControls = new OrbitControls(this.experience.camera.cameraInstance, this.experience.canvas);
+        this.orbitControls = new OrbitControls(this.experience.camera.cameraInstanceDummy, this.experience.canvas);
 
         this.orbitControls.enableDamping = true;
     }
 
     setDefault() {
-        this.initiateOrbitControls();
-
         const geometry = new THREE.BoxGeometry();
         const material = new THREE.MeshBasicMaterial({ color: "red" });
 
@@ -45,9 +53,13 @@ export default class World {
 
     update = () => {
         // update on each tick
-        if (this.orbitControls) this.orbitControls.update()
+        if (this.orbitControls) this.orbitControls.update();
+        this.controls.update();
+        this.carModel.update()
     }
 
-    destroy = () => {
+    destroy() {
+        console.log("world destroyed")
     }
+
 }

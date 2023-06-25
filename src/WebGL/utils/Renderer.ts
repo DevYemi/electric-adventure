@@ -40,8 +40,29 @@ export default class Renderer {
     }
 
     update() {
+        this.rendererInstance.setViewport(0, 0, this.sizes.width, this.sizes.height)
         // update renderer on each tick
-        this.rendererInstance.render(this.scene, this.camera.cameraInstance)
+        this.rendererInstance.render(this.scene, this.camera.cameraInstance);
+
+        // Second Screen
+        this.rendererInstance.setScissorTest(true)
+        this.rendererInstance.setViewport(
+            this.sizes.width - this.sizes.width / 3,
+            this.sizes.height - this.sizes.height / 3,
+            this.sizes.width / 3,
+            this.sizes.height / 3
+        );
+
+        this.rendererInstance.setScissor(
+            this.sizes.width - this.sizes.width / 3,
+            this.sizes.height - this.sizes.height / 3,
+            this.sizes.width / 3,
+            this.sizes.height / 3
+        );
+
+        this.rendererInstance.render(this.scene, this.experience.camera.cameraInstanceDummy)
+
+        this.rendererInstance.setScissorTest(false)
     }
 
     destroy() {
