@@ -3,6 +3,7 @@
  */
 import carModel from "@/assets/model/car.glb";
 import carFloorTexture from "@/assets/car-floor-texture.png"
+import carLaneTexture from "@/assets/car-lane-texture.jpg"
 
 
 
@@ -15,7 +16,7 @@ const sources: Sources[] = [
         path: carModel,
         useDraco: true,
         groupName: "carModelGroup",
-        totalGroupMember: 2
+        totalGroupMember: 3
     },
     {
         name: 'carFloorTexture',
@@ -23,7 +24,15 @@ const sources: Sources[] = [
         path: carFloorTexture,
         useDraco: false,
         groupName: "carModelGroup",
-        totalGroupMember: 2
+        totalGroupMember: 3
+    },
+    {
+        name: 'carLaneTexture',
+        type: 'texture',
+        path: carLaneTexture,
+        useDraco: false,
+        groupName: "carModelGroup",
+        totalGroupMember: 3
     },
 ]
 

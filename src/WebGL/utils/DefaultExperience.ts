@@ -6,6 +6,7 @@ import { Camera3dSpace, DefaultExperienceOptions, Sources } from './types'
 import Renderer from "./Renderer";
 import DebugUI from "./DebugUI";
 import ResourcesLoader from "./ResourcesLoader";
+import Performance from "./Performance";
 
 
 export default class DefaultExperience {
@@ -17,17 +18,20 @@ export default class DefaultExperience {
     renderer: Renderer;
     resourcesLoader!: ResourcesLoader;
     debugUI: DebugUI;
+    performance: Performance;
 
 
     constructor(canvas: HTMLCanvasElement, camera3dSpace: Camera3dSpace, options: DefaultExperienceOptions, sources?: Sources[]) {
         // set up
+        THREE.ColorManagement.enabled = false;
         this.debugUI = new DebugUI();
         this.canvas = canvas;
         this.sizes = new Sizes(canvas, options);
         this.time = new Time();
         this.scene = new THREE.Scene();
         this.camera = new Camera(this, camera3dSpace);
-        this.renderer = new Renderer(this)
+        this.renderer = new Renderer(this);
+        this.performance = new Performance();
         if (sources) this.resourcesLoader = new ResourcesLoader(sources)
 
 

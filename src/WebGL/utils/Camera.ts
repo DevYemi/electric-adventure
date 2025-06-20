@@ -46,7 +46,7 @@ export default class Camera {
         this.cameraInstance.scale.set(this.camera3dSpace.scale.x, this.camera3dSpace.scale.y, this.camera3dSpace.scale.z)
 
         this.cameraInstanceDummy = this.cameraInstance.clone();
-        this.scene.add(this.cameraInstance, this.cameraInstanceDummy);
+        this.scene.add(this.cameraInstance);
 
         // setup camera helper
         this.cameraHelpers = {

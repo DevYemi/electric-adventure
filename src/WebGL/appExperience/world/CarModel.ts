@@ -18,6 +18,7 @@ interface CarCompartmentTypes {
     carScreenGlasses: THREE.Object3D[],
     carChairs: THREE.Object3D[],
     carShadowMesh: THREE.Object3D | null,
+    carRoadLaneMesh: THREE.Object3D | null,
     positionOffset: number
 }
 
@@ -52,11 +53,12 @@ export default class CarModel {
             isAccelerating: false
         }
 
-        // Car parts object
+        // --------- Car parts object -----------
         this.compactments = {
             carBody: null,
             carBottom: null,
             carShadowMesh: null,
+            carRoadLaneMesh: null,
             carTyres: [],
             carChairs: [],
             carDoors: [],
@@ -65,14 +67,24 @@ export default class CarModel {
         }
 
         this.init();
+        // this.dummyModel()
+    }
+
+    dummyModel() {
+        const geometry = new THREE.BoxGeometry(1, 1, 1, 1);
+        const material = new THREE.MeshBasicMaterial({ color: "red", depthWrite: false });
+
+        const mesh = new THREE.Mesh(geometry, material);
+
+        this.scene.add(mesh);
     }
 
     init() {
-        this.resourceLoader.on("carModelGroupReady", () => { // Car model is done loading
+        this.resourceLoader.on("carModelGroupReady", () => { // ----- Car model is done loading ------
             this.car.mesh = (this.resourceLoader.items.carModel as GLTF).scene
             this.car.mesh.rotation.y = 0.8;
 
-            // Extract all car compactments
+            // ------- Extract all car compactments ----------
             this.car.mesh.traverse(child => {
 
                 if (child.name.includes("car")) {
@@ -81,6 +93,10 @@ export default class CarModel {
 
                 if (child.name.includes("car-floor")) {
                     this.compactments.carShadowMesh = child;
+                }
+                if (child.name.includes("car-lane")) {
+                    child.visible = false;
+                    this.compactments.carRoadLaneMesh = child;
                 }
 
                 if (child.name.includes("car-body")) {
@@ -111,13 +127,14 @@ export default class CarModel {
 
             this.scene.add(this.car.mesh);
             this.setUpFloor();
+            this.setUpRoadLane();
             this.transitionCompactmentIn();
 
             this.addDebugUi();
         })
     }
 
-    transitionCompactmentIn() { // animate car compactment into camera view
+    transitionCompactmentIn() { // ------ animate car compactment into camera view ----------
         const tyreVectors = this.compactments.carTyres.map(tyre => tyre.position);
         const doorsVectors = this.compactments.carDoors.map(door => door.position);
         const screenVectors = this.compactments.carScreenGlasses.map(screen => screen.position);
@@ -133,7 +150,7 @@ export default class CarModel {
                     duration: 2,
                     ease: "Bounce.easeOut"
                 }
-            ).to([this.compactments.carShadowMesh?.position, this.compactments.carBottom?.position],
+            ).to([this.compactments.carShadowMesh?.position, this.compactments.carBottom?.position, this.compactments.carRoadLaneMesh?.position],
                 {
                     y: `-=${this.compactments.positionOffset}`
                 }
@@ -163,10 +180,11 @@ export default class CarModel {
 
     }
 
-    accelerateCarModel() { // car acceleration animation
+    accelerateCarModel() { // ------- car acceleration animation -------------
         this.car.isAccelerating = true;
+        this.compactments.carRoadLaneMesh!.visible = true;
 
-        // Sweve the car either left or right 
+        //-------- Sweve the car either left or right --------------
         let swerveDirection: carSwerveDirectionType = "Right";
         const swerveCar = (dir: carSwerveDirectionType) => {
             const tl = gsap.timeline();
@@ -201,13 +219,13 @@ export default class CarModel {
 
     }
 
-    setUpFloor() { // set up car floor shadow
-        // setup texture
+    setUpFloor() { // -------- set up car floor shadow -----------
+        // --------- setup texture -------------
         const floorTexture = this.resourceLoader.items.carFloorTexture as THREE.Texture;
         floorTexture.flipY = false;
         floorTexture.colorSpace = THREE.SRGBColorSpace;
 
-        // set up floor material
+        //---------- set up floor material----------
         const floorMaterial = new THREE.ShaderMaterial({
             transparent: true,
             uniforms: {
@@ -220,7 +238,23 @@ export default class CarModel {
         (this.compactments.carShadowMesh as any).material = floorMaterial;
     }
 
-    addDebugUi() { // Add debug UI
+    setUpRoadLane() {
+        //--------- setup texture----------
+        const laneTexture = this.resourceLoader.items.carLaneTexture as THREE.Texture;
+        laneTexture.flipY = false;
+        laneTexture.colorSpace = THREE.SRGBColorSpace;
+
+
+        const laneMaterial = new THREE.MeshBasicMaterial({
+            alphaMap: laneTexture,
+            depthWrite: false,
+            transparent: true
+        });
+
+        (this.compactments.carRoadLaneMesh as any).material = laneMaterial;
+    }
+
+    addDebugUi() { //---------- Add debug UI-------------
         if (this.debugUi.isActive && this.debugUi.ui) {
             const carFolder = this.debugUi.ui.addFolder({ title: "carModel", expanded: false });
 
@@ -265,16 +299,21 @@ export default class CarModel {
 
     update() {
 
-        if (this.car.mesh) { //make camera look at car on each tick
+        if (this.car.mesh) { //------------make camera look at car on each tick------------
             this.camera.lookAt(this.car.mesh.position)
         }
 
-        // Animate car tyres
-        if (this.car.isAccelerating) {
 
+        if (this.car.isAccelerating) {
+            //-------- Animate car tyres----------
             this.compactments.carTyres.forEach(tyre => {
                 tyre.rotation.x += 0.1;
             })
+
+            //-------------Animate Road Lane------------
+            this.compactments.carRoadLaneMesh!.position.z -= 0.1;
+            const rightOffset = 42069 * 500;
+            this.compactments.carRoadLaneMesh!.position.z = (this.compactments.carRoadLaneMesh!.position.z + rightOffset) % 15 - 7.5;
 
         }
 

@@ -39,9 +39,13 @@ export default class AppExperience extends DefaultExperience {
     }
 
     updateWithTick() {
+        this.performance.stats.begin();
+
         this.world.update()
         this.camera.update()
         this.renderer.update()
+
+        this.performance.stats.end();
     }
 
     destroyExperience() {

@@ -2,6 +2,7 @@ import DefaultExperience from "./DefaultExperience";
 import Sizes from './Sizes';
 import * as THREE from 'three'
 import Camera from "./Camera";
+import DebugUI from "./DebugUI";
 
 export default class Renderer {
     public rendererInstance!: THREE.WebGLRenderer
@@ -9,7 +10,9 @@ export default class Renderer {
     public canvas: HTMLCanvasElement;
     public scene: THREE.Scene;
     public camera: Camera;
-    public sizes: Sizes
+    public sizes: Sizes;
+    private debugUI: DebugUI;
+    private displayMiniScreen: boolean;
 
     constructor(experience: DefaultExperience) {
         // Initialize 
@@ -18,6 +21,9 @@ export default class Renderer {
         this.scene = experience.scene;
         this.camera = experience.camera;
         this.sizes = experience.sizes;
+        this.debugUI = experience.debugUI;
+
+        this.displayMiniScreen = false;
 
         // create renderer Instance
         this.setRendererInstance()
@@ -31,6 +37,8 @@ export default class Renderer {
         })
         this.rendererInstance.setSize(this.sizes.width, this.sizes.height);
         this.rendererInstance.setPixelRatio(this.sizes.pixelRatio);
+        this.rendererInstance.outputColorSpace = THREE.SRGBColorSpace
+        this.addDebugUI();
     }
 
     resize() {
@@ -39,30 +47,50 @@ export default class Renderer {
         this.rendererInstance.setPixelRatio(this.sizes.pixelRatio)
     }
 
+    addDebugUI() {
+        if (this.debugUI.isActive && this.debugUI.ui) {
+            const folder = this.debugUI.ui.addFolder({ title: "Renderer" });
+            const params = { displayMiniScreen: this.displayMiniScreen }
+
+            folder.addInput(params, "displayMiniScreen").on("change", () => {
+                if (params.displayMiniScreen) {
+                    this.scene.add(this.experience.camera.cameraInstanceDummy)
+                } else {
+                    this.scene.remove(this.experience.camera.cameraInstanceDummy)
+                }
+
+                this.displayMiniScreen = params.displayMiniScreen;
+            })
+        }
+    }
+
     update() {
         this.rendererInstance.setViewport(0, 0, this.sizes.width, this.sizes.height)
         // update renderer on each tick
         this.rendererInstance.render(this.scene, this.camera.cameraInstance);
 
-        // Second Screen
-        this.rendererInstance.setScissorTest(true)
-        this.rendererInstance.setViewport(
-            this.sizes.width - this.sizes.width / 3,
-            this.sizes.height - this.sizes.height / 3,
-            this.sizes.width / 3,
-            this.sizes.height / 3
-        );
+        if (this.displayMiniScreen) {
+            // Second Screen
+            this.rendererInstance.setScissorTest(true)
+            this.rendererInstance.setViewport(
+                this.sizes.width - this.sizes.width / 3,
+                this.sizes.height - this.sizes.height / 3,
+                this.sizes.width / 3,
+                this.sizes.height / 3
+            );
 
-        this.rendererInstance.setScissor(
-            this.sizes.width - this.sizes.width / 3,
-            this.sizes.height - this.sizes.height / 3,
-            this.sizes.width / 3,
-            this.sizes.height / 3
-        );
+            this.rendererInstance.setScissor(
+                this.sizes.width - this.sizes.width / 3,
+                this.sizes.height - this.sizes.height / 3,
+                this.sizes.width / 3,
+                this.sizes.height / 3
+            );
 
-        this.rendererInstance.render(this.scene, this.experience.camera.cameraInstanceDummy)
+            this.rendererInstance.render(this.scene, this.experience.camera.cameraInstanceDummy)
 
-        this.rendererInstance.setScissorTest(false)
+            this.rendererInstance.setScissorTest(false)
+        }
+
     }
 
     destroy() {
