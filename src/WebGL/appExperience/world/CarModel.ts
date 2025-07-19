@@ -268,6 +268,7 @@ export default class CarModel {
       alphaMap: laneTexture,
       depthWrite: false,
       transparent: true,
+      opacity: 0.5,
     });
 
     (this.compactments.carRoadLaneMesh as any).material = laneMaterial;
@@ -341,7 +342,7 @@ export default class CarModel {
 
       //-------------Animate Road Lane------------
       this.compactments.carRoadLaneMesh!.position.z -=
-        this.roadLaneAnimation.speed * this.time.deltaTime * 0.05;
+        this.roadLaneAnimation.speed * this.time.deltaTime * 0.02;
 
       if (
         this.compactments.carRoadLaneMesh!.position?.z <
